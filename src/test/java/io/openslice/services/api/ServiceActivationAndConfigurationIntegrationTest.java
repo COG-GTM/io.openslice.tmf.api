@@ -204,6 +204,20 @@ public class ServiceActivationAndConfigurationIntegrationTest {
 				.with(SecurityMockMvcRequestPostProcessors.csrf()))
 				.andExpect(status().isNoContent());
 		assertThat(serviceRepoService.findAll().size()).isEqualTo(0);
+
+		/**
+		 * retrieve and patch of a non-existent service return 404
+		 */
+		mvc.perform(MockMvcRequestBuilders.get(SAC_BASE + "/" + responseSrvc.getId())
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNotFound());
+
+		mvc.perform(MockMvcRequestBuilders.patch(SAC_BASE + "/" + responseSrvc.getId())
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(JsonUtils.toJson(servUpd)))
+				.andExpect(status().isNotFound());
 	}
 
 }

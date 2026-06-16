@@ -126,17 +126,27 @@ public class ServiceApiController implements ServiceApi {
 	@PreAuthorize("hasAnyAuthority('ROLE_USER')" )
 	@Override
 	public ResponseEntity<Service> patchService(Principal principal, String id, @Valid ServiceUpdate service) {
-		Service c = serviceRepoService.updateService(id, service, true, null, null);
-
-		return new ResponseEntity<Service>(c, HttpStatus.OK);
+		try {
+			Service c = serviceRepoService.updateService(id, service, true, null, null);
+			if (c == null) {
+				return new ResponseEntity<Service>(HttpStatus.NOT_FOUND);
+			}
+			return new ResponseEntity<Service>(c, HttpStatus.OK);
+		} catch (Exception e) {
+			log.error("Couldn't serialize response for content type application/json", e);
+			return new ResponseEntity<Service>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	@PreAuthorize("hasAnyAuthority('ROLE_USER')" )
 	@Override
 	public ResponseEntity<Service> retrieveService(Principal principal, String id, @Valid String fields) {
 		try {
-
-			return new ResponseEntity<Service>(serviceRepoService.findByUuid(id), HttpStatus.OK);
+			Service s = serviceRepoService.findByUuid(id);
+			if (s == null) {
+				return new ResponseEntity<Service>(HttpStatus.NOT_FOUND);
+			}
+			return new ResponseEntity<Service>(s, HttpStatus.OK);
 		} catch (Exception e) {
 			log.error("Couldn't serialize response for content type application/json", e);
 			return new ResponseEntity<Service>(HttpStatus.INTERNAL_SERVER_ERROR);
