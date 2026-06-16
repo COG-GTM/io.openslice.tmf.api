@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.servlet.http.HttpServletRequest;
 @jakarta.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.SpringCodegen", date = "2020-04-29T12:42:32.118457300+03:00[Europe/Athens]")
 @Controller("HubApiController640")
-@RequestMapping("/ServiceActivationAndConfiguration/v3/")
+@RequestMapping("/serviceActivationAndConfiguration/v4/")
 public class HubApiController implements HubApi {
 
     private final ObjectMapper objectMapper;

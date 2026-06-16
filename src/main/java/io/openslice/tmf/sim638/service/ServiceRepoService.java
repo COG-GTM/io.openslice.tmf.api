@@ -340,6 +340,16 @@ public class ServiceRepoService {
 	}
 
 	@Transactional
+	public boolean deleteByUuid(String id) {
+		Optional<Service> optionalSrv = this.serviceRepo.findByUuid( id );
+		if ( optionalSrv.isPresent() ) {
+			this.serviceRepo.delete( optionalSrv.get() );
+			return true;
+		}
+		return false;
+	}
+
+	@Transactional
 	public Service updateService(String id, @Valid ServiceUpdate servUpd, boolean propagateToSO, Service updatedFromParentService, Service updatedFromChildService ) {
 		//Service service = this.findByUuid(id);
 		Service service = this.getServiceEager(id);

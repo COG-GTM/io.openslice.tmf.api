@@ -551,8 +551,8 @@ public class SwaggerDocumentationConfig {
 				.specVersion( SpecVersion.V30 ).addSecurityItem(new SecurityRequirement().addList("security_auth")) 
 				.info(new Info()
 						 .title("TMF 640 API Service Activation and Configuration")
-						 .description("## TMF API Reference: TMF640 - Service Activation and Configuration  ### Release : 18.5 - December 2018  Service Activation and Configuration API goal is to provide the ability to activate and configure Services.  ### Operations Service Activation and Configuration API performs the following operations on the resources : - Retrieve an entity or a collection of entities depending on filter criteria - Partial update of an entity (including updating rules) - Create an entity (including default values and creation rules) - Delete an entity (for administration purposes) - Manage notification of events")
-//			            .version("3.0.0")
+						 .description("## TMF API Reference: TMF640 - Service Activation and Configuration  Service Activation and Configuration API goal is to provide the ability to activate and configure Services, driving a Service through its lifecycle states up to active.  ### Operations Service Activation and Configuration API performs the following operations on the resources : - Retrieve an entity or a collection of entities depending on filter criteria - Partial update of an entity (including updating rules) - Create an entity (including default values and creation rules) - Delete an entity (for administration purposes) - Manage notification of events")
+			            .version("4.0.0")
 						.license(new License()
 								.name("Apache 2.0")
 								.url("http://openslice.io")))
@@ -568,7 +568,7 @@ public class SwaggerDocumentationConfig {
 		 SpringDocUtils.getConfig().replaceWithClass(java.time.OffsetDateTime.class, java.util.Date.class);
 		 
 	    return GroupedOpenApi.builder()
-	    		.group("tmf-api-640-Service Activation and Configuration-v3.0.0")
+	    		.group("tmf-api-640-ServiceActivationAndConfiguration-v4.0.0")
 	    		.addOpenApiCustomizer( this.sac640penAPI() )
 	    		.packagesToScan("io.openslice.tmf.sac640.api")
 	    		.build();
