@@ -78,7 +78,7 @@ public class ServiceApiController implements ServiceApi {
 
 				Service c = serviceRepoService.addService(service);
 
-				return new ResponseEntity<Service>(c, HttpStatus.OK);
+				return new ResponseEntity<Service>(c, HttpStatus.CREATED);
 			} else {
 
 				return new ResponseEntity<Service>(HttpStatus.FORBIDDEN);

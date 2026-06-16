@@ -125,7 +125,7 @@ public class ServiceActivationAndConfigurationIntegrationTest {
 				.with(SecurityMockMvcRequestPostProcessors.csrf())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(JsonUtils.toJson(aService)))
-				.andExpect(status().isOk())
+				.andExpect(status().isCreated())
 				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
 				.andReturn().getResponse().getContentAsString();
 
