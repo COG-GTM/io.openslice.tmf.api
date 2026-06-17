@@ -64,6 +64,8 @@ import io.openslice.tmf.sim638.model.ServiceAttributeValueChangeNotification;
 import io.openslice.tmf.sim638.model.ServiceCreate;
 import io.openslice.tmf.sim638.model.ServiceCreateEvent;
 import io.openslice.tmf.sim638.model.ServiceCreateNotification;
+import io.openslice.tmf.sim638.model.ServiceDeleteEvent;
+import io.openslice.tmf.sim638.model.ServiceDeleteNotification;
 import io.openslice.tmf.sim638.model.ServiceOrderRef;
 import io.openslice.tmf.sim638.model.ServiceStateChangeEvent;
 import io.openslice.tmf.sim638.model.ServiceStateChangeNotification;
@@ -343,7 +345,9 @@ public class ServiceRepoService {
 	public boolean deleteByUuid(String id) {
 		Optional<Service> optionalSrv = this.serviceRepo.findByUuid( id );
 		if ( optionalSrv.isPresent() ) {
-			this.serviceRepo.delete( optionalSrv.get() );
+			Service s = optionalSrv.get();
+			this.serviceRepo.delete( s );
+			raiseServiceDeleteNotification( s );
 			return true;
 		}
 		return false;
@@ -782,6 +786,16 @@ public class ServiceRepoService {
 	private void raiseServiceAttributeValueChangedNotification(Service so) {
 		ServiceAttributeValueChangeNotification n = new ServiceAttributeValueChangeNotification();
 		ServiceAttributeValueChangeEvent event = new ServiceAttributeValueChangeEvent();
+		event.service( so );
+		n.setEvent(event );
+		serviceApiRouteBuilder.publishEvent(n, so.getId());
+	
+	}
+
+	@Transactional
+	private void raiseServiceDeleteNotification(Service so) {
+		ServiceDeleteNotification n = new ServiceDeleteNotification();
+		ServiceDeleteEvent event = new ServiceDeleteEvent();
 		event.service( so );
 		n.setEvent(event );
 		serviceApiRouteBuilder.publishEvent(n, so.getId());
