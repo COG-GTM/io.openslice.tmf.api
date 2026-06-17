@@ -346,8 +346,8 @@ public class ServiceRepoService {
 		Optional<Service> optionalSrv = this.serviceRepo.findByUuid( id );
 		if ( optionalSrv.isPresent() ) {
 			Service s = optionalSrv.get();
-			this.serviceRepo.delete( s );
 			raiseServiceDeleteNotification( s );
+			this.serviceRepo.delete( s );
 			return true;
 		}
 		return false;
