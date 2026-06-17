@@ -220,4 +220,40 @@ public class ServiceActivationAndConfigurationIntegrationTest {
 				.andExpect(status().isNotFound());
 	}
 
+	@WithMockUser(username = "osadmin", roles = { "USER", "ADMIN" })
+	@Test
+	public void testAdminListIncludesServiceWithoutOrder() throws UnsupportedEncodingException, IOException, Exception {
+
+		/**
+		 * a TMF640 service is created directly, without any service order
+		 */
+		ServiceCreate aService = new ServiceCreate();
+		aService.setName("orderless SAC Service");
+		aService.setCategory("Activation");
+
+		String responseService = mvc.perform(MockMvcRequestBuilders.post(SAC_BASE)
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(JsonUtils.toJson(aService)))
+				.andExpect(status().isCreated())
+				.andReturn().getResponse().getContentAsString();
+		Service responseSrvc = JsonUtils.toJsonObj(responseService, Service.class);
+		assertThat(responseSrvc.getServiceOrder()).isEmpty();
+
+		/**
+		 * the admin list path must return the orderless service as a full Service
+		 * object (admin branch uses findAll(), not the order-joined / raw-map query)
+		 */
+		String listed = mvc.perform(MockMvcRequestBuilders.get(SAC_BASE)
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+				.andReturn().getResponse().getContentAsString();
+		Service[] listedSrvcs = JsonUtils.toJsonObj(listed, Service[].class);
+		assertThat(listedSrvcs.length).isEqualTo(1);
+		assertThat(listedSrvcs[0].getId()).isEqualTo(responseSrvc.getId());
+		assertThat(listedSrvcs[0].getCategory()).isEqualTo("Activation");
+	}
+
 }

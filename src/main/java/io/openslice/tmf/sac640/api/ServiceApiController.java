@@ -20,7 +20,6 @@
 package io.openslice.tmf.sac640.api;
 
 import java.security.Principal;
-import java.util.HashMap;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -112,7 +111,7 @@ public class ServiceApiController implements ServiceApi {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 			if ( authentication.getAuthorities().contains( new SimpleGrantedAuthority( UserRoleType.ROLE_ADMIN.getValue()  ) ) ) {
-				return new ResponseEntity<List<Service>>(serviceRepoService.findAll(null, new HashMap<>()), HttpStatus.OK);
+				return new ResponseEntity<List<Service>>(serviceRepoService.findAll(), HttpStatus.OK);
 			}else {
 				return new ResponseEntity<List<Service>>(serviceRepoService.findAll( principal.getName(), UserPartRoleType.REQUESTER ), HttpStatus.OK);
 			}
